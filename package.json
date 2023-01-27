@@ -11,5 +11,9 @@
   },
   "devDependencies": {
     "electron": "^22.1.0"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.3",
+    "sunrise-sunset-js": "^2.2.1"
   }
 }
