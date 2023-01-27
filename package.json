@@ -1,0 +1,9 @@
+{
+  "name": "electron-astrology",
+  "version": "1.0.0",
+  "description": "electron desktop astrology app",
+  "main": "index.js",
+  "author": "Sina Sadeqi",
+  "license": "MIT",
+  "private": true
+}
