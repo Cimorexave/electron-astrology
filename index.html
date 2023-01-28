@@ -29,10 +29,13 @@
                 <input id="location" type="date">
             </li>
         </ul>
-        <span>
-            <label for="mapOption">Or select your location on the map</label>
-            <input type="checkbox" id="mapOption" >
-        </span>
+        <div class="row">
+          <span>
+              <label for="mapOption">Or select your location on the map</label>
+              <input type="checkbox" id="mapOption" >
+          </span>
+          <button id="calculate">Calculate</button>
+        </div>
         <div id="map" ></div>
     </div>
     <script src="renderer.js" type="module" defer></script>
