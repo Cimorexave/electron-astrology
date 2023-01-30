@@ -25,6 +25,20 @@ ul {
 .map-is-disabled {
     pointer-events: none;
 }
+.map-is-disabled::after {
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+    opacity: 0.8;
+    background-color: white;
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-weight: bolder;
+    font-size: larger;
+    content: 'Map is disabled. Check the box to select your point.';
+}
 li {
     font-weight: bold;
 }
