@@ -17,6 +17,8 @@ let cordinates
 let sunrise, sunset;
 let marker;
 let records = []
+let frames = []
+let rows = []
 
 // toggle map function
 const toggleMap = () => {
@@ -91,17 +93,66 @@ calculateBtn.addEventListener('click', (e) => {
         const delta = (moment(new Date(untilSunrise)) - moment(new Date(from.value))) / 86400000
         log('delta in moment', untilSunrise)
         for (let i = 0; i < delta; i++) {
-            // const mSunrise = moment(sunrise)
-            // const mSunset = moment(sunset)
             records.push({
                 id: i ,
                 sequenceOftheDay: i + 1,
+                sunriseMs: new Date(getSunrise(cordinates[0] ,cordinates[1] ,new Date(moment(sunrise).add(i, 'day')))).getTime(),
+                sunsetMs: new Date(getSunset(cordinates[0] ,cordinates[1] ,new Date(moment(sunrise).add(i, 'day')))).getTime(),
                 date: moment(sunrise).add(i, 'day').format('YYYY/M/D'),
                 jdate: moment(sunrise).add(i, 'day').format('jYYYY/jM/jD'),
                 sunirse: moment(getSunrise(cordinates[0] ,cordinates[1] ,new Date(moment(sunrise).add(i, 'day')))).format('jYYYY/jM/jD HH:mm:ss'),
-                sunset: moment(getSunrise(cordinates[0] ,cordinates[1] ,new Date(moment(sunrise).add(i, 'day')))).format('jYYYY/jM/jD HH:mm:ss'),
+                sunset: moment(getSunset(cordinates[0] ,cordinates[1] ,new Date(moment(sunrise).add(i, 'day')))).format('jYYYY/jM/jD HH:mm:ss'),
             })
         }
+        for (let j = 0; j < records.length; j++) {
+            frames.push({
+                deltaMilliseconds: (records[j].sunsetMs - records[j].sunriseMs) ,
+                type: 'day',
+                date: `${records[j].jdate}`,
+                start: records[j].sunrise,
+                finish: records[j].sunset,
+                startMilliseconds: records[j].sunriseMs,
+                endMilliseconds: records[j].sunsetMs,
+            })
+            if (records[j+1]) {
+                frames.push({
+                    deltaMilliseconds: (records[j+1].sunriseMs - records[j].sunsetMs) ,
+                    type: 'night',
+                    date: `${records[j].jdate} - ${records[j+1].jdate}`,
+                    start: records[j].sunset,
+                    finish: records[j+1].sunirse,
+                    startMilliseconds: records[j].sunsetMS,
+                    endMilliseconds: records[j+1].sunriseMs,
+                })
+            }
+        }
+        records.forEach(record => {
+            const unit = record.deltaMilliseconds / (12 * 60)
+            for (let k = 0; k < 11; k++) {
+                if ( k === 0) {
+                    rows.push({
+                        id: k,
+                        start: moment(new Date(records.startMilliseconds)).format('HH:mm'),
+                        end: moment(new Date(records.startMilliseconds + unit)).format('HH:mm'),
+                    })
+                }
+                rows.push({
+                    id: k,
+                    start: moment(new Date(records.startMilliseconds + (k * unit))).format('HH:mm'),
+                    end: moment(new Date(records.startMilliseconds + ((k+1) * unit))).format('HH:mm'),
+                })
+                if ( k === 11) {
+                    rows.push({
+                        id: k,
+                        start: moment(new Date(records.endMilliseconds - unit)).format('HH:mm'),
+                        end: moment(new Date(records.endMilliseconds)).format('HH:mm'),
+                    })
+                }
+            }
+        })
         log('records', records)
+        log('frames', frames)
+        log('rows', rows)
+
     } else log('no dates or location chosen')
 })
