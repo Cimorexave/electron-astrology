@@ -1,4 +1,5 @@
 const { getSunrise, getSunset } = require("sunrise-sunset-js")
+const cities = require('./ir.json')
 
 const {log} = console
 const mapEl = document.getElementById('map')
@@ -11,6 +12,18 @@ const calculateBtn = document.getElementById('calculate')
 let cordinates
 let sunrise, sunset;
 let marker;
+
+cities.forEach(city => {
+    const option = document.createElement('option')
+    option.value = [city.lat, city.lng]
+    option.text = city.city
+    cityEl.add(option)
+})
+cityEl.addEventListener('change', (e) => {
+    const latlng = e.target.value.split(',')
+    cordinates = [parseFloat(latlng[0]), parseFloat(latlng[1])]
+    log(cordinates)
+})
 
 const map = L.map('map').setView([
     35.4087524662718, 51.67968750000001], 5);
