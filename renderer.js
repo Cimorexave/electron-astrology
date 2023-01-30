@@ -1,6 +1,8 @@
+// import modules
 const { getSunrise, getSunset } = require("sunrise-sunset-js")
 const cities = require('./ir.json')
 
+// utils and components
 const {log} = console
 const mapEl = document.getElementById('map')
 const cityEl = document.getElementById('location')
@@ -9,13 +11,13 @@ const from = document.getElementById('from')
 const to = document.getElementById('to')
 const calculateBtn = document.getElementById('calculate')
 
+// global vars
 let cordinates
 let sunrise, sunset;
 let marker;
 
 // toggle map function
 const toggleMap = () => {
-    log('called', isMap.checked)
     if (isMap.checked) {
         map.scrollWheelZoom.enable()
         map.dragging.enable()
@@ -57,7 +59,6 @@ cities.forEach(city => {
 cityEl.addEventListener('change', (e) => {
     const latlng = e.target.value.split(',')
     cordinates = [parseFloat(latlng[0]), parseFloat(latlng[1])]
-    log(cordinates)
 })
 // creating the map
 const map = L.map('map').setView([
