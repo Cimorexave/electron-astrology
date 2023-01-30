@@ -22,7 +22,7 @@ ul {
     flex-direction: row;
     gap: 1rem;
 }
-.disabled-map {
+.map-is-disabled {
     pointer-events: none;
 }
 li {
