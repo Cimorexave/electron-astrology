@@ -15,6 +15,7 @@
   "dependencies": {
     "all": "^0.0.0",
     "leaflet": "^1.9.3",
+    "moment-jalaali": "^0.9.6",
     "sunrise-sunset-js": "^2.2.1"
   }
 }

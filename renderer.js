@@ -1,5 +1,6 @@
 // import modules
 const { getSunrise, getSunset } = require("sunrise-sunset-js")
+const moment = require('moment-jalaali')
 const cities = require('./ir.json')
 
 // utils and components
@@ -15,6 +16,7 @@ const calculateBtn = document.getElementById('calculate')
 let cordinates
 let sunrise, sunset;
 let marker;
+let records = []
 
 // toggle map function
 const toggleMap = () => {
@@ -83,8 +85,23 @@ calculateBtn.addEventListener('click', (e) => {
     if (from.value && to.value && cordinates) {
         sunrise = getSunrise(cordinates[0], cordinates[1], new Date(from.value) )
         sunset = getSunset(cordinates[0], cordinates[1], new Date(from.value) )
-        log('sunrise, sunset from',sunrise, sunset)
-        sunrise = getSunrise(cordinates[0], cordinates[1], new Date(to.value) )
-        sunset = getSunset(cordinates[0], cordinates[1], new Date(to.value) )
+        log('sunrise, sunset starting day',sunrise, sunset)
+        const until = new Date(to.value).setHours(0,0,0)
+        const untilSunrise = getSunrise(cordinates[0], cordinates[1], new Date(to.value))
+        const delta = (moment(new Date(untilSunrise)) - moment(new Date(from.value))) / 86400000
+        log('delta in moment', untilSunrise)
+        for (let i = 0; i < delta; i++) {
+            // const mSunrise = moment(sunrise)
+            // const mSunset = moment(sunset)
+            records.push({
+                id: i ,
+                sequenceOftheDay: i + 1,
+                date: moment(sunrise).add(i, 'day').format('YYYY/M/D'),
+                jdate: moment(sunrise).add(i, 'day').format('jYYYY/jM/jD'),
+                sunirse: moment(getSunrise(cordinates[0] ,cordinates[1] ,new Date(moment(sunrise).add(i, 'day')))).format('jYYYY/jM/jD HH:mm:ss'),
+                sunset: moment(getSunrise(cordinates[0] ,cordinates[1] ,new Date(moment(sunrise).add(i, 'day')))).format('jYYYY/jM/jD HH:mm:ss'),
+            })
+        }
+        log('records', records)
     } else log('no dates or location chosen')
 })
